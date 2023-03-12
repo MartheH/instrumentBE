@@ -37,13 +37,13 @@
                 Console.ReadKey();
                 return;
             }
-            
+            /*
             //Serial configuration Load from file
             //StreamWriter outputFile = new StreamWriter("serial.conf");
-            StreamReader serialConfReader= new StreamReader(fileNameSerialConfig);
-            serialPortName = serialConfReader.ReadLine();
-            Console.WriteLine("Serial Port Configured: "+serialPortName);
-            serialConfReader.Close();
+            //StreamReader serialConfReader= new StreamReader(fileNameSerialConfig);
+            //serialPortName = serialConfReader.ReadLine();
+            //Console.WriteLine("Serial Port Configured: "+serialPortName);
+            //serialConfReader.Close();
 
             
             //Console.WriteLine(commandResponse);
@@ -52,8 +52,9 @@
             //commandResponse = SerialCommand("COM3", "readconf");
             //Console.WriteLine(commandResponse);
             //Console.ReadKey();
+            */
             
-            
+            /*
             string[] ComPorts = System.IO.Ports.SerialPort.GetPortNames();
             //string[] ComPorts = SerialPort.GetPortNames();
 
@@ -66,7 +67,7 @@
                 //client.Send(port);
                 Console.WriteLine(port);
             }
-            
+            */
             //Console.WriteLine("Enter port name:");
             //string portName = Console.ReadLine();
             /*
@@ -197,16 +198,9 @@
                 //data received
                 byte[] buffer = new byte[1024]; 
 
-                //if (buffer.Length >= 0)
-                //{ 
                 int bytesReceived = client.Receive(buffer); // feilmeldinger på denne, kommer ikke forbi, venter på buffer?
-                
-                //if (bytesReceived > 0)
-                //{
+               
                 string commandReceived = Encoding.ASCII.GetString(buffer, 0, bytesReceived);
-                //Console.WriteLine("HEEEEEEEEEEE"+commandReceived);
-                //client.Send(commandReceived);
-                //Console.WriteLine("Testong commandsssssssssss: " + commandReceived);
 
                 if(commandReceived.Substring(0,7) == "comport")     //kommer bare ut "comport" og ikke "COM3"
                 {
@@ -217,13 +211,14 @@
                     string[] GettingPorts = System.IO.Ports.SerialPort.GetPortNames();      //feilmelding på denne
                     //client.Send(Encoding.ASCII.GetBytes(commandResponsePass));
                     
-                    Console.WriteLine("The following COM ports exist:");
+                    //Console.WriteLine("The following COM ports exist:");
                     foreach (string Ports in GettingPorts)
                     {
                         client.Send(Encoding.ASCII.GetBytes("Portname configurated " + Ports));     //serialPortName er null, får ikke ut tilgjengelige porter
                         client.Close();
                         //Console.WriteLine("My ports"+Ports);
                     }
+                    /*
                     //string commandResponse = SerialCommand("COM3", commandReceived);
                     //Console.WriteLine("Command response was: " + commandResponse);
 
@@ -233,7 +228,7 @@
 
                     //string[] ComPorts = System.IO.Ports.SerialPort.GetPortNames();
                     //client.Send(Encoding.ASCII.GetBytes(commandResponsePass));
-
+                    */
 
                     /*
                     //
@@ -269,9 +264,10 @@
 
                 else
                 {
+                    /* Ta vekk dette?
                     string commandResponse = SerialCommand(serialPortName, commandReceived);
                     Console.WriteLine("Command response was: "+commandResponse);
-
+                    */
 
                     //Send to client
                     string commandResponsePass = PassCommandToSerial(commandReceived);
@@ -293,7 +289,7 @@
 
                         string[] confparts = serialResponseConf.Split(";");
 
-
+                        /*
                         //string commandResponse = SerialCommand(commandReceived);
                         //Console.WriteLine("Name: "+commandResponse[0]);
 
@@ -305,6 +301,7 @@
                         //SerialSend "readconf" 
                         //Read response
                         //Return Response
+                        */
                         return "Name: "+ confparts[1] + "LRV: "+ confparts[2] + "URV: "+ confparts[3]+ "Alarm Low: "+ confparts[4] + "Alarm High: "+ confparts[5];
                     }
                     else if (commandReceived.Substring(0, commandsToSerial[1].Length) == commandsToSerial[1])
