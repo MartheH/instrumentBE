@@ -25,7 +25,7 @@
             string serverIP = "127.0.0.1";
             //string serverIP = client.Port;
             int TCPReceived = 5000;
-            IPEndPoint endpoint = new IPEndPoint (IPAddress.Parse(serverIP), TCPReceived);
+            IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(serverIP), TCPReceived);
             Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             //bind to endpoint and start server
@@ -68,13 +68,13 @@
                 */
 
                 //data received
-                byte[] buffer = new byte[1024]; 
+                byte[] buffer = new byte[1024];
 
                 int bytesReceived = client.Receive(buffer);
                 //WriteToLogFile(Convert.ToString(buffer));
                 string commandReceived = Encoding.ASCII.GetString(buffer, 0, bytesReceived);
                 //WriteToLogFile(Convert.ToString(commandReceived));
-                if (commandReceived.Substring(0,7) == "comport")
+                if (commandReceived.Substring(0, 7) == "comport")
                 {
                     string[] GettingPorts = System.IO.Ports.SerialPort.GetPortNames();
 
@@ -91,9 +91,9 @@
                     string commandResponsePass = PassCommandToSerial(commandReceived);
                     client.Send(Encoding.ASCII.GetBytes(commandResponsePass));
                     client.Close();
-                    Console.WriteLine("Client disconnected...");   
+                    Console.WriteLine("Client disconnected...");
                 }
- 
+
                 static string PassCommandToSerial(string commandReceived)
                 {
                     char[] delimiters = { '.', ';' };
@@ -102,7 +102,7 @@
                     {
                         string serialResponseConf = SerialCommand("COM3", commandReceived);
                         string[] confparts = serialResponseConf.Split(";");
-                        return "Name: "+ confparts[1] + "LRV: "+ confparts[2] + "URV: "+ confparts[3]+ "Alarm Low: "+ confparts[4] + "Alarm High: "+ confparts[5];
+                        return "Name: " + confparts[1] + "LRV: " + confparts[2] + "URV: " + confparts[3] + "Alarm Low: " + confparts[4] + "Alarm High: " + confparts[5];
                     }
                     else if (commandReceived.Substring(0, commandsToSerial[1].Length) == commandsToSerial[1])
                     {
@@ -128,13 +128,13 @@
                         string[] scaledparts = serialResponseReadstatus.Split(delimiters);
                         return "Status: " + scaledparts[1];
                     }
-                    
+
                     else
                     {
                         return "Failed!";
                     }
                 }
-            }  
+            }
         }
 
         static string SerialCommand(string portName, string command)
@@ -151,29 +151,26 @@
                 serialPort.Close();
             }
 
-            catch (System.IO.IOException) 
+            catch (System.IO.IOException)
             {
                 serialResponse = "Command failed...";
             }
             return serialResponse;
         }
-        
+
         private static void WriteToLogFile(string logText)
         {
             string fileName = "log.txt";
             string filePath = Path.Combine(Environment.CurrentDirectory, fileName);
             // Open the file for writing
-            using (FileStream fs = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.Read)) 
+            using (FileStream fs = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.Read))
             {
-                using (StreamWriter sw = new StreamWriter(fs)) 
+                using (StreamWriter sw = new StreamWriter(fs))
                 {
-                        sw.WriteLine("" + System.DateTime.Now + "" + logText + "\r\n");
-                }    
+                    sw.WriteLine("" + System.DateTime.Now + "" + logText + "\r\n");
+                }
                 fs.Close();
             }
         }
     }
 }
-
-//Endre navn til InstrumentBE
-//Legg inn kode som spør Arduino om "readscaled", "readstatus" "writeconf" og "readconf"
