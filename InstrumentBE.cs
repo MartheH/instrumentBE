@@ -45,35 +45,19 @@
 
             //output info
             Console.WriteLine("Server started. Waiting for clients...");
-            /*
-            if (logToFile)
-            {
-                WriteToLogFile("Server started. Waiting for connection...");
-            }
-            */
+            
 
             while (true)
             {
-
                 Socket client = server.Accept();
                 Console.WriteLine("Client connected.");
-                //if (logToFile) WriteToLogFile("Client connected.");
-
-                /*
-                if (false)
-                {
-                    Console.WriteLine("Client is not connected");
-                    break;
-                }
-                */
 
                 //data received
                 byte[] buffer = new byte[1024];
 
                 int bytesReceived = client.Receive(buffer);
-                //WriteToLogFile(Convert.ToString(buffer));
                 string commandReceived = Encoding.ASCII.GetString(buffer, 0, bytesReceived);
-                //WriteToLogFile(Convert.ToString(commandReceived));
+                WriteToLogFile("Command received was: " + commandReceived);
                 if (commandReceived.Substring(0, 7) == "comport")
                 {
                     string[] GettingPorts = System.IO.Ports.SerialPort.GetPortNames();
@@ -89,6 +73,7 @@
                 {
                     //Send to client
                     string commandResponsePass = PassCommandToSerial(commandReceived);
+                    WriteToLogFile("Command response was: " + commandResponsePass);
                     client.Send(Encoding.ASCII.GetBytes(commandResponsePass));
                     client.Close();
                     Console.WriteLine("Client disconnected...");
@@ -157,7 +142,7 @@
             }
             return serialResponse;
         }
-
+ 
         private static void WriteToLogFile(string logText)
         {
             string fileName = "log.txt";
