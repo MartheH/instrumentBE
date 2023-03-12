@@ -87,11 +87,6 @@
 
                 else
                 {
-                    /* Ta vekk dette?
-                    string commandResponse = SerialCommand(serialPortName, commandReceived);
-                    Console.WriteLine("Command response was: "+commandResponse);
-                    */
-
                     //Send to client
                     string commandResponsePass = PassCommandToSerial(commandReceived);
                     client.Send(Encoding.ASCII.GetBytes(commandResponsePass));
@@ -134,7 +129,7 @@
                         return "Status: " + scaledparts[1];
                     }
                     
-                    else //må ha med denne
+                    else
                     {
                         return "Failed!";
                     }
@@ -146,7 +141,6 @@
         {
             int baudRate = 9600;
             string serialResponse = "";
-            //SerialPort serialPort = new SerialPort(portName, baudRate);
             SerialPort serialPort = new SerialPort("COM3", baudRate);
 
             try
@@ -164,14 +158,6 @@
             return serialResponse;
         }
         
-        /*
-        private static void dataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            string message = serialPort.ReadLine();
-            //textBoxComReceived.AppendText(message);
-            Console.WriteLine(message);
-        }
-        */
         private static void WriteToLogFile(string logText)
         {
             string fileName = "log.txt";
